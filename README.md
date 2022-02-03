@@ -60,7 +60,7 @@ class BarRepository: DBRepository<BarObject, BarModel> {
 ```
 or
 ```
-let barRepository = DBRepository<BarObject, BarModel>
+let barRepository = DBRepository<BarObject, BarModel>()
 ```
 
 ## And you can use one for everything
