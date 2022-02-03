@@ -40,11 +40,17 @@ open class DBRepository<O: Object & LocalMappable, M: AnyObject> {
         realmService.save(objects)
     }
     
-    public func delete(by key: String, completion: (() -> Void)?) {
+    public func delete(by key: String, completion: (() -> Void)? = nil) {
         realmService.deleteObject(O.self, with: key, completion: completion)
     }
     
-    public func clearDB(completion: (() -> Void)?) {
+    public func delete(_ model: M, completion: (() -> Void)? = nil) {
+        let object = O()
+        object.mapEntityFromDomain(data: model)
+        realmService.deleteObject(object, completion: completion)
+    }
+    
+    public func clearDB(completion: (() -> Void)? = nil) {
         realmService.deleteObjects(O.self, completion: completion)
     }
     

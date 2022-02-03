@@ -20,6 +20,17 @@ open class RealmService {
         realm.object(ofType: type, forPrimaryKey: key)
     }
     
+    public func deleteObject<T: Object>(_ object: T, completion: (() -> Void)?) {
+        do {
+            try realm.write {
+                realm.delete(object)
+                completion?()
+            }
+        } catch let error {
+            print(error)
+        }
+    }
+    
     public func deleteObject<T: Object>(_ type: T.Type, with key: String, completion: (() -> Void)?) {
         do {
             try realm.write {
