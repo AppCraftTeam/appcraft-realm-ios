@@ -31,18 +31,20 @@ class BarObject: Object {
 }
 ```
 
-## Then create extension LocalMappable for the object
+## Then create extension ACRealmLocalMappable for the object
 ```
-extension BarObject: LocalMappable {
+extension BarObject: ACRealmLocalMappable {
+
+    associatedtype ModelType = BarModel
     
-    public func mapEntityToDomain() -> AnyObject {
+    public func mapToModel() -> ModelType? {
                BarModel(id: id,
                         bar: bar,
                         foo: foo)
     }
     
-    public func mapEntityFromDomain(data: AnyObject) {
-        guard let model = data as? BarModel else { return }
+    public func mapFromModel(_ model: ModelType?) {
+        guard let model = model else { return }
                 
         id = model.id
         bar = model.bar
@@ -52,15 +54,15 @@ extension BarObject: LocalMappable {
 }
 ```
 
-## Create repository with class DBRepository 
+## Create repository with class ACRealmRepository 
 ```
-class BarRepository: DBRepository<BarObject, BarModel> {
+class BarRepository: ACRealmRepository<BarObject> {
     ...
 }
 ```
 or
 ```
-let barRepository = DBRepository<BarObject, BarModel>()
+let barRepository = ACRealmRepository<BarObject>()
 ```
 
 ## And you can use one for everything
