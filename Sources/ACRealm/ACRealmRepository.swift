@@ -21,13 +21,17 @@ open class ACRealmRepository<ObjectType: ACRealmLocalMappable> {
         realmService.getObject(ObjectType.self, with: key)?.mapToModel()
     }
     
-    public func save(_ model: ObjectType.ModelType) {
+    public func save(_ model: ObjectType.ModelType,
+                     completion: SuccessHandler? = nil) {
+        
         let object = ObjectType()
         object.mapFromModel(model)
-        realmService.save(object)
+        realmService.save(object, completion: completion)
     }
     
-    public func save(_ models: [ObjectType.ModelType]) {
+    public func save(_ models: [ObjectType.ModelType],
+                     completion: SuccessHandler? = nil) {
+        
         var objects: [ObjectType] = []
         
         models.forEach { model in
@@ -36,20 +40,23 @@ open class ACRealmRepository<ObjectType: ACRealmLocalMappable> {
             objects.append(object)
         }
         
-        realmService.save(objects)
+        realmService.save(objects, completion: completion)
     }
     
-    public func delete(by key: String, completion: (() -> Void)? = nil) {
+    public func delete(by key: String,
+                       completion: SuccessHandler? = nil) {
         realmService.deleteObject(ObjectType.self, with: key, completion: completion)
     }
     
-    public func delete(_ model: ObjectType.ModelType, completion: (() -> Void)? = nil) {
+    public func delete(_ model: ObjectType.ModelType,
+                       completion: SuccessHandler? = nil) {
+        
         let object = ObjectType()
         object.mapFromModel(model)
         realmService.deleteObject(object, completion: completion)
     }
     
-    public func clearDB(completion: (() -> Void)? = nil) {
+    public func clearDB(completion: SuccessHandler? = nil) {
         realmService.deleteObjects(ObjectType.self, completion: completion)
     }
     

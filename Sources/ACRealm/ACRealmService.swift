@@ -7,12 +7,15 @@
 import Foundation
 import RealmSwift
 
+public typealias SuccessHandler = (_ success: Bool) -> Void
+
 open class ACRealmService {
     
     public func getObjects<T: Object>(_ type: T.Type) -> [T] {
         if let realm = try? Realm() {
             return Array(realm.objects(type))
         }
+        print("[ACRealmService] - [\(#function)] - error with try Realm")
         return []
     }
     
@@ -20,68 +23,78 @@ open class ACRealmService {
         if let realm = try? Realm() {
             return realm.object(ofType: type, forPrimaryKey: key)
         }
+        print("[ACRealmService] - [\(#function)] - error with try Realm")
         return nil
     }
     
-    public func deleteObject<T: Object>(_ object: T, completion: (() -> Void)?) {
+    public func deleteObject<T: Object>(_ object: T, completion: SuccessHandler?) {
         do {
             let realm = try Realm()
             try realm.write {
                 realm.delete(object)
-                completion?()
+                completion?(true)
             }
         } catch let error {
+            completion?(false)
             print("[ACRealmService] - [\(#function)] - error:", error)
         }
     }
     
-    public func deleteObject<T: Object>(_ type: T.Type, with key: String, completion: (() -> Void)?) {
+    public func deleteObject<T: Object>(_ type: T.Type, with key: String, completion: SuccessHandler?) {
         do {
             let realm = try Realm()
             try realm.write {
                 if let object = realm.object(ofType: type, forPrimaryKey: key) {
                     realm.delete(object)
-                    completion?()
+                    completion?(true)
+                } else {
+                    completion?(false)
                 }
             }
         } catch let error {
+            completion?(false)
             print("[ACRealmService] - [\(#function)] - error:", error)
         }
     }
     
-    public func deleteObjects<T: Object>(_ type: T.Type, completion: (() -> Void)?) {
+    public func deleteObjects<T: Object>(_ type: T.Type, completion: SuccessHandler?) {
         do {
             let realm = try Realm()
             try realm.write {
                 let objects = realm.objects(T.self)
                 realm.delete(objects)
-                completion?()
+                completion?(true)
             }
         } catch let error {
+            completion?(false)
             print("[ACRealmService] - [\(#function)] - error:", error)
         }
     }
     
-    public func save<T: Object>(_ object: T) {
+    public func save<T: Object>(_ object: T, completion: SuccessHandler?) {
         do {
             let realm = try Realm()
             try realm.write {
                 realm.add(object, update: .modified)
+                completion?(true)
             }
         }
         catch {
+            completion?(false)
             print("[ACRealmService] - [\(#function)] - error:", error)
         }
     }
     
-    public func save<T: Object>(_ objects: [T]) {
+    public func save<T: Object>(_ objects: [T], completion: SuccessHandler?) {
         do {
             let realm = try Realm()
             try realm.write {
                 realm.add(objects, update: .modified)
+                completion?(true)
             }
         }
         catch {
+            completion?(false)
             print("[ACRealmService] - [\(#function)] - error:", error)
         }
     }
