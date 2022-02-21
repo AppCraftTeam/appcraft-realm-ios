@@ -7,11 +7,9 @@
 import Foundation
 import RealmSwift
 
-public typealias SuccessHandler = (_ success: Bool) -> Void
-
 open class ACRealmService {
     
-    public func getObjects<T: Object>(_ type: T.Type) -> [T] {
+    open func getObjects<T: Object>(_ type: T.Type) -> [T] {
         if let realm = try? Realm() {
             return Array(realm.objects(type))
         }
@@ -19,7 +17,7 @@ open class ACRealmService {
         return []
     }
     
-    public func getObject<T: Object>(_ type: T.Type, with key: String) -> T? {
+    open func getObject<T: Object>(_ type: T.Type, with key: String) -> T? {
         if let realm = try? Realm() {
             return realm.object(ofType: type, forPrimaryKey: key)
         }
@@ -27,7 +25,7 @@ open class ACRealmService {
         return nil
     }
     
-    public func deleteObject<T: Object>(_ object: T, completion: SuccessHandler?) {
+    open func deleteObject<T: Object>(_ object: T, completion: ACRealmSuccessHandler?) {
         do {
             let realm = try Realm()
             try realm.write {
@@ -40,7 +38,7 @@ open class ACRealmService {
         }
     }
     
-    public func deleteObject<T: Object>(_ type: T.Type, with key: String, completion: SuccessHandler?) {
+    open func deleteObject<T: Object>(_ type: T.Type, with key: String, completion: ACRealmSuccessHandler?) {
         do {
             let realm = try Realm()
             try realm.write {
@@ -57,7 +55,7 @@ open class ACRealmService {
         }
     }
     
-    public func deleteObjects<T: Object>(_ type: T.Type, completion: SuccessHandler?) {
+    open func deleteObjects<T: Object>(_ type: T.Type, completion: ACRealmSuccessHandler?) {
         do {
             let realm = try Realm()
             try realm.write {
@@ -71,7 +69,7 @@ open class ACRealmService {
         }
     }
     
-    public func save<T: Object>(_ object: T, completion: SuccessHandler?) {
+    open func save<T: Object>(_ object: T, completion: ACRealmSuccessHandler?) {
         do {
             let realm = try Realm()
             try realm.write {
@@ -85,7 +83,7 @@ open class ACRealmService {
         }
     }
     
-    public func save<T: Object>(_ objects: [T], completion: SuccessHandler?) {
+    open func save<T: Object>(_ objects: [T], completion: ACRealmSuccessHandler?) {
         do {
             let realm = try Realm()
             try realm.write {
@@ -99,7 +97,7 @@ open class ACRealmService {
         }
     }
     
-    public func modify(block: () -> Void) {
+    open func modify(block: () -> Void) {
         do {
             let realm = try Realm()
             try realm.write {

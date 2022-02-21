@@ -13,24 +13,24 @@ open class ACRealmRepository<ObjectType: ACRealmLocalMappable> {
     
     public init() {}
     
-    public func getModels() -> [ObjectType.ModelType] {
+    open func getModels() -> [ObjectType.ModelType] {
         realmService.getObjects(ObjectType.self).compactMap { $0.mapToModel() }
     }
     
-    public func getModel(by key: String) -> ObjectType.ModelType? {
+    open func getModel(by key: String) -> ObjectType.ModelType? {
         realmService.getObject(ObjectType.self, with: key)?.mapToModel()
     }
     
-    public func save(_ model: ObjectType.ModelType,
-                     completion: SuccessHandler? = nil) {
+    open func save(_ model: ObjectType.ModelType,
+                     completion: ACRealmSuccessHandler? = nil) {
         
         let object = ObjectType()
         object.mapFromModel(model)
         realmService.save(object, completion: completion)
     }
     
-    public func save(_ models: [ObjectType.ModelType],
-                     completion: SuccessHandler? = nil) {
+    open func save(_ models: [ObjectType.ModelType],
+                     completion: ACRealmSuccessHandler? = nil) {
         
         var objects: [ObjectType] = []
         
@@ -43,20 +43,20 @@ open class ACRealmRepository<ObjectType: ACRealmLocalMappable> {
         realmService.save(objects, completion: completion)
     }
     
-    public func delete(by key: String,
-                       completion: SuccessHandler? = nil) {
+    open func delete(by key: String,
+                       completion: ACRealmSuccessHandler? = nil) {
         realmService.deleteObject(ObjectType.self, with: key, completion: completion)
     }
     
-    public func delete(_ model: ObjectType.ModelType,
-                       completion: SuccessHandler? = nil) {
+    open func delete(_ model: ObjectType.ModelType,
+                       completion: ACRealmSuccessHandler? = nil) {
         
         let object = ObjectType()
         object.mapFromModel(model)
         realmService.deleteObject(object, completion: completion)
     }
     
-    public func clearDB(completion: SuccessHandler? = nil) {
+    public func clearDB(completion: ACRealmSuccessHandler? = nil) {
         realmService.deleteObjects(ObjectType.self, completion: completion)
     }
     
