@@ -1,7 +1,16 @@
 # ACRealm
 
-## Create model
+## Installation
+
+1. Go to `File` -> `Swift Packages` -> `Add Package Dependency...`
+2. Then search for 
 ```
+https://github.com/AppCraftTeam/appcraft-realm-ios.git
+```
+3. Select the SDK version that you want to use
+
+## Create model
+```swift
 class BarModel {
     var id: String
     var bar: Int
@@ -18,7 +27,7 @@ class BarModel {
 ```
 
 ## Create object
-```
+```swift
 @objcMembers
 class BarObject: Object {
     dynamic var id: String = UUID().uuidString
@@ -32,7 +41,7 @@ class BarObject: Object {
 ```
 
 ## Then create extension ACRealmLocalMappable for the object
-```
+```swift
 extension BarObject: ACRealmLocalMappable {
 
     associatedtype ModelType = BarModel
@@ -55,18 +64,18 @@ extension BarObject: ACRealmLocalMappable {
 ```
 
 ## Create repository with class ACRealmRepository 
-```
+```swift
 class BarRepository: ACRealmRepository<BarObject> {
     ...
 }
 ```
 or
-```
+```swift
 let barRepository = ACRealmRepository<BarObject>()
 ```
 
 ## And you can use one for everything
-```
+```swift
 let repository = BarRepository()
 
 let models = repository.getModels()
